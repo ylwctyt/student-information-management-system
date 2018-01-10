@@ -1,0 +1,32 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"zh-hans" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+
+
+{% block title %}南京大学商学院学生管理系统{% endblock %}
+
+{% block branding %}
+    <h1 id="site-name">
+        <a href="{% url 'users.views.person_index' username %}">
+            南京大学商学院学生管理系统
+        </a>
+    </h1>
+{% endblock %}
+
+{% block content %}
+    <p>Hello, {{ username }}. You're at the your own website.</p>
+{% endblock %}
+
+{% block breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        <a href="{% url 'users.views.person_index' username %}">{% trans 'Mysite' %}</a>
+        {% if title %} &rsaquo; {{ title }}{% endif %}
+    </div>
+{% endblock %}
+
+{% block nav-global %}
+    翠翠酱
+{% endblock %}
