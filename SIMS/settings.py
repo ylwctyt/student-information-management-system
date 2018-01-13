@@ -70,6 +70,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'SIMS.wsgi.application'
 
+# User
+
+AUTH_USER_MODEL = 'users.MyUser'
+
 # Database
 # https://docs.djangoproject.com/en/2.0/ref/settings/#databases
 
