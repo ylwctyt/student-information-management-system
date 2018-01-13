@@ -1,0 +1,27 @@
+{% extends "users/base.html" %}
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"zh-hans" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+
+
+{% block content %}
+    <h1>{% trans 'my profile' %}</h1>
+    <table>
+        <tr>
+            <td>{% trans 'user' %}</td>
+            <td>{{ username }}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'name' %}</td>
+            <td>{{ name }}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'major' %}</td>
+            <td>{{ major }}</td>
+        </tr>
+        <tr>
+            <td>{% trans 'email' %}</td>
+            <td>{{ email }}</td>
+        </tr>
+    </table>
+{% endblock %}
