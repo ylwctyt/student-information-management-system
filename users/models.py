@@ -52,6 +52,6 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=MyUser)
 def save_profile(sender, instance, **kwargs):
     if instance.is_student:
-        Student.objects.save()
+        Student.objects.update()
     if instance.is_teacher:
         Teacher.objects.save()
