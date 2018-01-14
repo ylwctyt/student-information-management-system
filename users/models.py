@@ -1,6 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from django.contrib import admin
+
 from django.contrib.auth.models import User
 from django.contrib.auth.models import AbstractUser
 
@@ -52,6 +54,6 @@ def create_profile(sender, instance, created, **kwargs):
 @receiver(post_save, sender=MyUser)
 def save_profile(sender, instance, **kwargs):
     if instance.is_student:
-        Student.objects.update()
+        Student.objects.update_or_create(user=instance)
     if instance.is_teacher:
-        Teacher.objects.save()
+        Teacher.objects.update_or_create(user=instance)

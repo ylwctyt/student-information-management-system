@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 
-from .models import MyUser
+from .models import MyUser, Student
 
 
 class MyUserCreationForm(forms.ModelForm):
@@ -47,3 +47,19 @@ class MyUserChangeForm(forms.ModelForm):
         # This is done here, rather than on the field, because the
         # field does not have access to the initial value
         return self.initial["password"]
+
+
+class StudentCreationForm(forms.ModelForm):
+    """A form for creating new users. Includes all the required
+    fields, plus a repeated password."""
+
+    class Meta:
+        model = Student
+        fields = ('user', 'grade')
+
+    def save(self, commit=True):
+        # Save the provided password in hashed format
+        student = super().save(commit=False)
+        if commit:
+            student.save()
+        return student

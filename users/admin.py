@@ -1,9 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import MyUser
+from .models import MyUser, Student
 
-from .forms import MyUserChangeForm, MyUserCreationForm
+from .forms import MyUserChangeForm, MyUserCreationForm, StudentCreationForm
 
 
 # Register your models here.
@@ -29,7 +29,7 @@ class MyUserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'major', 'password1', 'password2')}
+            'fields': ('username', 'email', 'major', 'password1', 'password2', 'is_admin', 'is_student', 'is_teacher')}
          ),
     )
     search_fields = ('email',)
@@ -39,3 +39,4 @@ class MyUserAdmin(BaseUserAdmin):
 
 # Now register the new UserAdmin...
 admin.site.register(MyUser, MyUserAdmin)
+

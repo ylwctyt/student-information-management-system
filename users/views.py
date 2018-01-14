@@ -28,7 +28,8 @@ def profile(request, username):
         return render(request, 'users/profile.html', {'username': username,
                                                       'name': request.user.last_name + request.user.first_name,
                                                       'email': request.user.email,
-                                                      'major': request.user.student.major, })
+                                                      'major': request.user.major,
+                                                      'grade': request.user.student.grade})
     else:
         return HttpResponse('Hello, ' + request.user.username + '. You\'re looking at ' + username + '\'s website.')
 #        return render(request, 'users/index.html')
