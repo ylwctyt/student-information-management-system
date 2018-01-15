@@ -43,10 +43,28 @@ class Teacher(models.Model):
     seniority = models.IntegerField(blank=True)
 
 
+# courseList
+
+class CourseList(models.Model):
+    SEMESTER = (('A', '秋'), ('S', '春'))
+
+    name = models.CharField(_('course'), max_length=50)
+    year = models.IntegerField()
+    semester = models.CharField(max_length=1, choices=SEMESTER)
+
+
+class Course(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    course = models.ForeignKey(CourseList, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.course.name
+
+
 @receiver(post_save, sender=MyUser)
 def create_profile(sender, instance, created, **kwargs):
     if created and instance.is_student:
-        Student.objects.create(user=instance)
+        Student.objects.create(user=instance, grade=2016)
     if created and instance.is_teacher:
         Teacher.objects.create(user=instance)
 
