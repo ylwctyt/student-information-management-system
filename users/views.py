@@ -21,14 +21,32 @@ def person_index(request, username):
                                                        'name': request.user.last_name + request.user.first_name, })
 
 
+# TODO:list the course
+
 @login_required(login_url=settings.LOGIN_URL)
 def profile(request, username):
     # if the user gets its own profile
     if request.user.username == username:
-        return render(request, 'users/profile.html', {'username': username,
-                                                      'name': request.user.last_name + request.user.first_name,
-                                                      'email': request.user.email,
-                                                      'major': request.user.student.major, })
+
+        # make course list
+        course_query_list = request.user.course_set.all()
+        course_name_list = course_query_list.values_list('course__name', 'course__year', 'course__semester')
+        # course_list = list(course_query_list)
+        # course_info_list = zip(['course', 'course'], course_list)
+        course_info_list = list(course_name_list)
+
+        # make lists to pass the parameters
+        lists = [('basic information',
+                  (('username', username),
+                   ('name', request.user.last_name + request.user.first_name),
+                   ('email', request.user.email),
+                   ('major', request.user.major)),),
+                 ('student information',
+                  (('grade', request.user.student.grade),),),
+                 ('course information',
+                  course_info_list,), ]
+
+        return render(request, 'users/profile.html', {'username': username, 'lists': lists})
     else:
         return HttpResponse('Hello, ' + request.user.username + '. You\'re looking at ' + username + '\'s website.')
 #        return render(request, 'users/index.html')

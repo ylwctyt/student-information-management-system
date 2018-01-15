@@ -6,22 +6,15 @@
 
 {% block content %}
     <h1>{% trans 'my profile' %}</h1>
-    <table>
-        <tr>
-            <td>{% trans 'user' %}</td>
-            <td>{{ username }}</td>
-        </tr>
-        <tr>
-            <td>{% trans 'name' %}</td>
-            <td>{{ name }}</td>
-        </tr>
-        <tr>
-            <td>{% trans 'major' %}</td>
-            <td>{{ major }}</td>
-        </tr>
-        <tr>
-            <td>{% trans 'email' %}</td>
-            <td>{{ email }}</td>
-        </tr>
-    </table>
+    {% for name, list in lists %}
+        <h2>{% trans name %}</h2>
+        <table>
+            {% for item in list %}
+                <tr>
+                    <td>{% trans item.0 %}</td>
+                    <td>{{ item.1 }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
 {% endblock %}
