@@ -3,6 +3,8 @@ from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
 
+from django.utils.translation import gettext as _
+
 from . import settings
 
 from django.contrib.admin.models import LogEntry
@@ -28,23 +30,39 @@ def profile(request, username):
     # if the user gets its own profile
     if request.user.username == username:
 
-        # make course list
-        course_query_list = request.user.course_set.all()
-        course_name_list = course_query_list.values_list('course__name', 'course__year', 'course__semester')
-        # course_list = list(course_query_list)
-        # course_info_list = zip(['course', 'course'], course_list)
-        course_info_list = list(course_name_list)
+        # my profile
 
-        # make lists to pass the parameters
-        lists = [('basic information',
-                  (('username', username),
-                   ('name', request.user.last_name + request.user.first_name),
-                   ('email', request.user.email),
-                   ('major', request.user.major)),),
-                 ('student information',
-                  (('grade', request.user.student.grade),),),
-                 ('course information',
-                  course_info_list,), ]
+        # basic profile tuple
+        base_show_tuple = (_('basic information'),
+                           ((_('username'), username),
+                            (_('name'), request.user.last_name + request.user.first_name),
+                            (_('email'), request.user.email),
+                            (_('major'), request.user.major)),)
+        # student profile tuple
+        student_show_tuple = (_('student information'),
+                              ((_('grade'), request.user.student.grade),),)
+        # course tuple
+        course_query_list = request.user.course_set.all()
+        course_info_list = list(course_query_list.values_list('course__name', 'course__year', 'course__semester'))
+        course_show_tuple = (_('course information'), course_info_list,)
+
+        # professional experience
+
+        intern_query_list = request.user.intern_set.all()
+        # language
+        intern_ln18_list = list(intern_query_list.values_list('is_zh', 'company_zh', 'company_en', ))
+        intern_coname_list = tuple(map(lambda x: x[1] if x[0] else x[2], intern_ln18_list))
+        # elements
+        intern_elmt_list = list(intern_query_list.values_list('position', 'st_time', 'ed_time', 'contribution'))
+        intern_titl_list = ['position', 'start time', 'end time', 'contribution', ]
+        intern_info_list = tuple(map(lambda x: tuple(zip(intern_titl_list, x)), intern_elmt_list))
+        # zip together
+        intern_info_tuple = tuple(zip(intern_coname_list, intern_info_list))
+
+        # make lists for passing the parameters
+
+        lists = [{'name': _('my profile'), 'items': (base_show_tuple, student_show_tuple, course_show_tuple), },
+                 {'name': _('professional experience'), 'items': intern_info_tuple}]
 
         return render(request, 'users/profile.html', {'username': username, 'lists': lists})
     else:

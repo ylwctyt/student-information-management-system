@@ -1,20 +1,43 @@
 {% extends "users/base.html" %}
 {% load i18n static %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
-<html lang="{{ LANGUAGE_CODE|default:"zh-hans" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<br lang="{{ LANGUAGE_CODE|default:"zh-hans" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 
 
 {% block content %}
-    <h1>{% trans 'my profile' %}</h1>
-    {% for name, list in lists %}
-        <h2>{% trans name %}</h2>
-        <table>
-            {% for item in list %}
-                <tr>
-                    <td>{% trans item.0 %}</td>
-                    <td>{{ item.1 }}</td>
-                </tr>
-            {% endfor %}
-        </table>
+    {#    <h1>{% trans 'my profile' %}</h1>#}
+    {#    {% for name, list in lists %}#}
+    {#        <h2>{% trans name %}</h2>#}
+    {#        <table>#}
+    {#            {% for item in list %}#}
+    {#                <tr>#}
+    {#<td>{% trans item.0 %}</td>#}
+    {#<td>{{ item.1 }}</td>#}
+    {#                    {% for thing in item %}#}
+    {#                        <td>{{ thing }}</td>#}
+    {#                    {% endfor %}#}
+    {#                </tr>#}
+    {#            {% endfor %}#}
+    {#        </table>#}
+    {#    {% endfor %}#}
+
+    {% for list in lists %}
+        <p>
+        <h1>{{ list.name }}</h1>
+        {% for item in list.items %}
+            <h2>{% trans item.0 %}</h2>
+            <table>
+                {% for thing in item.1 %}
+                    <tr>
+                        {% for element in thing %}
+                            <td>{{ element }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+        </p>
+        <br>
     {% endfor %}
+
 {% endblock %}
