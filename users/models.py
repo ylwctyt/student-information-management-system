@@ -61,6 +61,25 @@ class Course(models.Model):
         return self.course.name
 
 
+# TODO:trans?
+
+class Intern(models.Model):
+    user = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    is_zh = models.BooleanField(_('is_zh'), default='True')
+    company_zh = models.CharField(_('company_zh'), max_length=80)
+    company_en = models.CharField(_('company_zh'), max_length=150, blank=True)
+    position = models.CharField(_('position'), max_length=10, blank=True, default='intern')
+    st_time = models.DateField()
+    ed_time = models.DateField()
+    contribution = models.TextField()
+
+    def __str__(self):
+        if self.is_zh:
+            return self.company_zh
+        else:
+            return self.company_en
+
+
 @receiver(post_save, sender=MyUser)
 def create_profile(sender, instance, created, **kwargs):
     if created and instance.is_student:
